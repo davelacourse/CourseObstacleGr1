@@ -2,9 +2,25 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private const string IS_WALKING = "isWalking";
+    
     [SerializeField] private float _vitesseJoueur = 10f; // Vitesse de déplacement joueur
     [SerializeField] private float _vitesseRotation = 1000f; // Vitesse de déplacement joueur
-    
+
+    private Animator _animator;  // Attribut qui contient le controlleur d'animation
+    private PlayerInputActions _playerInputActions;
+
+    private void Awake()
+    {
+        _playerInputActions = new PlayerInputActions();
+        _playerInputActions.Player.Enable();
+    }
+
+    private void Start()
+    {
+        _animator = GetComponentInChildren<Animator>();
+    }
+
     private void Update()
     {
         PlayerMove();
@@ -28,6 +44,11 @@ public class Player : MonoBehaviour
             Quaternion toRotation = Quaternion.LookRotation(direction, Vector3.up);
             transform.rotation = 
                 Quaternion.RotateTowards(transform.rotation, toRotation, _vitesseRotation * Time.deltaTime);
+            _animator.SetBool(IS_WALKING, true);  // Déclence l'animation de marche
+        }
+        else
+        {
+            _animator.SetBool(IS_WALKING, false); // Déclence l'animation de Idle
         }
     }
 }
