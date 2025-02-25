@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 
     private Animator _animator;  // Attribut qui contient le controlleur d'animation
     private PlayerInputActions _playerInputActions;
+    private Rigidbody _rb;
 
     private void Awake()
     {
@@ -19,9 +20,10 @@ public class Player : MonoBehaviour
     private void Start()
     {
         _animator = GetComponentInChildren<Animator>();
+        _rb = GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         PlayerMove();
     }
@@ -29,15 +31,22 @@ public class Player : MonoBehaviour
     // Méthode responsable des déplacements du joueur
     private void PlayerMove()
     {
-        float dirX = Input.GetAxis("Horizontal");
-        float dirY = Input.GetAxis("Vertical");
-        Vector3 direction = new Vector3(dirX, 0f, dirY);
+        // float dirX = Input.GetAxis("Horizontal");  //Input Manager
+        // float dirY = Input.GetAxis("Vertical");    //Input Manager
+        Vector2 direction2D = _playerInputActions.Player.Move.ReadValue<Vector2>();
+        
+        Vector3 direction = new Vector3(direction2D.x, 0f, direction2D.y);
 
         // Normalise le vector à 1 peut importe la direction
         direction = direction.normalized;
 
         //Déplace le joueur dans dans la direction voulu
-        transform.Translate(direction * Time.deltaTime * _vitesseJoueur, Space.World);
+        //transform.Translate(direction * Time.deltaTime * _vitesseJoueur, Space.World);
+
+        //Déplace le rigidbody du joueur
+        _rb.linearVelocity = direction * Time.fixedDeltaTime * _vitesseJoueur;  // Utilise la vitesse
+
+        //_rb.AddForce(direction * Time.fixedDeltaTime * _vitesseJoueur); // Pousse par une force sur l'objet
 
         if(direction != Vector3.zero)
         {

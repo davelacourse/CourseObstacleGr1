@@ -149,7 +149,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Controller"",
+                    ""name"": ""Joystick"",
                     ""id"": ""d9030aa8-3a7a-41e2-ac96-1e48bcae113b"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
