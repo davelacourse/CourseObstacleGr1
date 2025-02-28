@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     }
 
     private int _score;
+    public int Score => _score;  //accesseur à l'attribut _score
 
     private void Start()
     {

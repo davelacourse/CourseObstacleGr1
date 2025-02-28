@@ -12,12 +12,19 @@ public class GestionCollision : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!_isHit)
+        if(collision.gameObject.tag == "Player")
         {
-            GetComponent<MeshRenderer>().material = _materialHit;
-            GameManager.Instance.AddScore();
-            _isHit = true;
+            if (!_isHit && this.gameObject.tag != "FinNiveau")
+            {
+                GetComponent<MeshRenderer>().material = _materialHit;
+                GameManager.Instance.AddScore();
+                _isHit = true;
+            }
+            else if (!_isHit && this.gameObject.tag == "FinNiveau")
+            {
+                Debug.Log("Fin de Partie Hit(s)=" + GameManager.Instance.Score);
+                collision.gameObject.SetActive(false);
+            }
         }
-
     }
 }
