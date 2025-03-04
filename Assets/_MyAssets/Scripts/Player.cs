@@ -17,6 +17,11 @@ public class Player : MonoBehaviour
         _playerInputActions.Player.Enable();
     }
 
+    private void OnDestroy()
+    {
+        _playerInputActions.Player.Disable();
+    }
+
     private void Start()
     {
         _animator = GetComponentInChildren<Animator>();

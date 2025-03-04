@@ -13,10 +13,12 @@ public class GestionPieges : MonoBehaviour
 
     private List<Rigidbody> _listeRb = new List<Rigidbody>();
     private Vector3 _direction;
+    private bool _isTrigger = false;
     
     private void Start()
     {
         _direction = new Vector3(_directionX, _directionY, _directionZ);
+        // Récupère tous les rigidbody de chacun de mes pièges
         foreach(var piege in _listePieges)
         {
             _listeRb.Add(piege.GetComponent<Rigidbody>());
@@ -26,10 +28,16 @@ public class GestionPieges : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if(other.tag == "Player" && !_isTrigger)
         {
-            //_rb.useGravity = true;
-            //_rb.AddForce(_direction * _intensiteForce);
+            // Active la gravité, applique la force et fait apparaître chacun des pièges
+            foreach(var rb in _listeRb)
+            {
+                rb.gameObject.SetActive(true);
+                rb.useGravity = true;
+                rb.AddForce(_direction * _intensiteForce);
+            }
+            _isTrigger = true;
         }
     }
 }

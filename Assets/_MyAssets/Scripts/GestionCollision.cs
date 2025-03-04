@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GestionCollision : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class GestionCollision : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player")
         {
             if (!_isHit && this.gameObject.tag != "FinNiveau")
             {
@@ -22,8 +23,19 @@ public class GestionCollision : MonoBehaviour
             }
             else if (!_isHit && this.gameObject.tag == "FinNiveau")
             {
-                Debug.Log("Fin de Partie Hit(s)=" + GameManager.Instance.Score);
-                collision.gameObject.SetActive(false);
+
+                int noScene = SceneManager.GetActiveScene().buildIndex;
+                if (noScene >= SceneManager.sceneCountInBuildSettings - 1)
+                {
+                    GameManager.Instance.AfficherFinDePartie();
+                    collision.gameObject.SetActive(false);
+                }
+                else
+                {
+                    GameManager.Instance.SetNiveau1(Time.time);
+                    SceneManager.LoadScene(noScene + 1);
+                }
+
             }
         }
     }
