@@ -6,10 +6,14 @@ public class Player : MonoBehaviour
     
     [SerializeField] private float _vitesseJoueur = 10f; // Vitesse de déplacement joueur
     [SerializeField] private float _vitesseRotation = 1000f; // Vitesse de déplacement joueur
+    [SerializeField] private float _jumpForce = 1000f; // Vitesse de déplacement joueur
+    [SerializeField] private Transform _feetTransform = default(Transform);
+    [SerializeField] private LayerMask _floorLayer = default(LayerMask);
 
     private Animator _animator;  // Attribut qui contient le controlleur d'animation
     private PlayerInputActions _playerInputActions;
     private Rigidbody _rb;
+    private bool isGrounded = true;
 
     private void Awake()
     {
@@ -24,8 +28,13 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        _animator = GetComponentInChildren<Animator>();
+        _animator = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
+    }
+
+    private void Update()
+    {
+
     }
 
     private void FixedUpdate()
@@ -49,8 +58,11 @@ public class Player : MonoBehaviour
         //transform.Translate(direction * Time.deltaTime * _vitesseJoueur, Space.World);
 
         //Déplace le rigidbody du joueur
-        _rb.linearVelocity = direction * Time.fixedDeltaTime * _vitesseJoueur;  // Utilise la vitesse
+        _rb.linearVelocity = new Vector3(direction.x * Time.fixedDeltaTime * _vitesseJoueur
+            , _rb.linearVelocity.y, direction.z * Time.fixedDeltaTime * _vitesseJoueur);  // Utilise la vitesse
 
+        
+        
         //_rb.AddForce(direction * Time.fixedDeltaTime * _vitesseJoueur); // Pousse par une force sur l'objet
 
         if(direction != Vector3.zero)
@@ -64,5 +76,20 @@ public class Player : MonoBehaviour
         {
             _animator.SetBool(IS_WALKING, false); // Déclence l'animation de Idle
         }
+
+        if(Input.GetKeyDown(KeyCode.Space)) 
+        {
+            if(Physics.CheckSphere(_feetTransform.position, 0.5f, _floorLayer))
+            {
+                _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+            }
+        }
+
+
+        if (!Physics.CheckSphere(_feetTransform.position, 0.5f, _floorLayer))
+        {
+            _rb.AddForce(Vector3.down * 50f); //, ForceMode.Impulse);
+        }
+        
     }
 }
