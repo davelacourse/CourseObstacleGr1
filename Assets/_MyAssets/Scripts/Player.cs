@@ -33,20 +33,16 @@ public class Player : MonoBehaviour
 
     private void OnDestroy()
     {
+        //S'assure de disable la map et aussi d'annuler les souscription aux events
         _playerInputActions.Player.Disable();
-        _playerInputActions.Player.Jump.performed -= Jump_performed;
-        _playerInputActions.Player.Dance.performed -= Dance_performed;
+        _playerInputActions.Player.Jump.performed -= Jump_performed;  //Souscrit à l'event Jump performed
+        _playerInputActions.Player.Dance.performed -= Dance_performed; //Souscrit à l'event Jump performed
     }
 
     private void Start()
     {
         _animator = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
-    }
-
-    private void Update()
-    {
-
     }
 
     private void FixedUpdate()
@@ -70,14 +66,16 @@ public class Player : MonoBehaviour
         //transform.Translate(direction * Time.deltaTime * _vitesseJoueur, Space.World);
 
         //Déplace le rigidbody du joueur
-        _rb.linearVelocity = new Vector3(direction.x * Time.fixedDeltaTime * _vitesseJoueur
-            , _rb.linearVelocity.y, direction.z * Time.fixedDeltaTime * _vitesseJoueur);  // Utilise la vitesse
+        float RbMoveOnX = direction.x * Time.fixedDeltaTime * _vitesseJoueur;
+        float RbMoveOnZ = direction.z * Time.fixedDeltaTime * _vitesseJoueur;
+        float RbMoveOnY = _rb.linearVelocity.y;
+ 
+        _rb.linearVelocity = new Vector3(RbMoveOnX, RbMoveOnY, RbMoveOnZ);  // Utilise la vitesse
 
-        
-        
-        //_rb.AddForce(direction * Time.fixedDeltaTime * _vitesseJoueur); // Pousse par une force sur l'objet
+        //_rb.AddForce(new Vector3(RbMoveOnX, RbMoveOnY, RbMoveOnZ)); // Pousse par une force sur l'objet
 
-        if(direction != Vector3.zero)
+        //Rotation du joueur
+        if (direction != Vector3.zero)
         {
             Quaternion toRotation = Quaternion.LookRotation(direction, Vector3.up);
             transform.rotation = 
@@ -90,26 +88,25 @@ public class Player : MonoBehaviour
             _animator.SetBool(IS_WALKING, false); // Déclence l'animation de Idle
         }
 
+        //Vérifie si le joueur ne touche pas le une force le pousse vers le bas
         if (!Physics.CheckSphere(_feetTransform.position, 0.5f, _floorLayer))
         {
-            _rb.AddForce(Vector3.down * 60f); //, ForceMode.Impulse);
+            _rb.AddForce(Vector3.down * 60f);
         }
         else
         {
            _animator.SetBool(IS_JUMPING, false);
         }
-        
     }
 
     private void Jump_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         _animator.SetBool(IS_JUMPING, true);
         _animator.SetBool(IS_DANCING, false);
+        // Si le joueur touche le sol on peut sauter 
         if (Physics.CheckSphere(_feetTransform.position, 0.5f, _floorLayer))
         {
-            
             _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
         }
-        //_animator.SetBool(IS_JUMPING, false);
     }
 }
