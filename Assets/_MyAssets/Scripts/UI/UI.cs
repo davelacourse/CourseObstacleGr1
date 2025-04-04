@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class UIManagerStartEnd : MonoBehaviour
+public class UI : MonoBehaviour
 {
     public void LoadNextScene()
     {
         int noScene = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(noScene+1);
+        SceneManager.LoadScene(noScene + 1);
     }
 
     public void Quitter()
@@ -16,5 +16,10 @@ public class UIManagerStartEnd : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    public void StartScene()
+    {
+        SceneManager.LoadScene(0);
     }
 }

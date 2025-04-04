@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     public int Score => _score;  //accesseur à l'attribut _score
 
     private float _tempsDepart;
+    public float TempsDepart => _tempsDepart;
+
     private float _tempsNiveau1;
     private int _collisionsNiveau1;
 
@@ -34,6 +36,7 @@ public class GameManager : MonoBehaviour
     public void AddScore()
     {
         _score++;
+        UIManager.Instance.UpdateScore();
     }
 
     public void SetNiveau1(float temps)
