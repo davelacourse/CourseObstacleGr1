@@ -16,6 +16,21 @@ public class UIManager : UI
         {
             Destroy(this);
         }
+
+        _playerInputActions = new PlayerInputActions();
+        _playerInputActions.Player.Enable();
+        _playerInputActions.Player.Pause.performed += Event_Pause;
+    }
+
+    private void OnDestroy()
+    {
+        _playerInputActions.Player.Disable();
+        _playerInputActions.Player.Pause.performed -= Event_Pause;
+    }
+
+    private void Event_Pause(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        TogglePause();
     }
 
     [SerializeField] private TMP_Text _txtTemps = default(TMP_Text);
@@ -23,6 +38,7 @@ public class UIManager : UI
     [SerializeField] private GameObject _panelPause = default(GameObject);
 
     private bool _enPause = false;
+    private PlayerInputActions _playerInputActions;
 
     private void Start()
     {
@@ -32,10 +48,13 @@ public class UIManager : UI
     private void Update()
     {
         GestionTempsUI();
-        if(Input.GetKeyDown(KeyCode.Escape))
+        // Utilisation du Input Manager (old)
+        /*
+        if(Input.GetButtonDown("Pause"))
         {
             TogglePause();
         }
+        */
     }
 
     public void TogglePause()
