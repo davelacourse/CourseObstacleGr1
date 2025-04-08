@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class UIManager : UI
 {
@@ -36,6 +37,7 @@ public class UIManager : UI
     [SerializeField] private TMP_Text _txtTemps = default(TMP_Text);
     [SerializeField] private TMP_Text _txtCollisions = default(TMP_Text);
     [SerializeField] private GameObject _panelPause = default(GameObject);
+    [SerializeField] private GameObject _boutonContinuer = default(GameObject);
 
     private bool _enPause = false;
     private PlayerInputActions _playerInputActions;
@@ -43,6 +45,8 @@ public class UIManager : UI
     private void Start()
     {
         UpdateScore();
+        _enPause = false;
+        Time.timeScale = 1f;
     }
 
     private void Update()
@@ -69,6 +73,8 @@ public class UIManager : UI
         {
             Time.timeScale = 0f;
             _enPause = true;
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(_boutonContinuer);
         }
     }
 

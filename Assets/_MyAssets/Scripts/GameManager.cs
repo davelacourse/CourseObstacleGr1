@@ -24,8 +24,8 @@ public class GameManager : MonoBehaviour
     private float _tempsDepart;
     public float TempsDepart => _tempsDepart;
 
-    private float _tempsNiveau1;
-    private int _collisionsNiveau1;
+    private float _tempsFin;
+    public float TempsFin => _tempsFin;
 
     private void Start()
     {
@@ -39,21 +39,9 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateScore();
     }
 
-    public void SetNiveau1(float temps)
+    public void SetTempsFin(float temps)
     {
-        _tempsNiveau1 = temps;
-        _collisionsNiveau1 = _score;
-    }
-
-    public void AfficherFinDePartie()
-    {
-        Debug.Log("*** Fin de partie ****");
-        Debug.Log("Temps Niveau 1 = " + _tempsNiveau1.ToString("f2") + " secondes");
-        Debug.Log("Collisions Niveau 1 = " + _collisionsNiveau1);
-        Debug.Log("*******************************");
-        Debug.Log("Temps Niveau 2 = " + ((Time.time-_tempsDepart) - _tempsNiveau1).ToString("f2") + " secondes");
-        Debug.Log("Collisions Niveau 2 = " + (_score - _collisionsNiveau1));
-        Debug.Log("*******************************");
-        Debug.Log("Temps total avec collisions = " + ((Time.time - _tempsDepart) + _score).ToString("f2") + " secondes");
+        _tempsFin = temps;
+        
     }
 }

@@ -23,18 +23,12 @@ public class GestionCollision : MonoBehaviour
             }
             else if (!_isHit && this.gameObject.tag == "FinNiveau")
             {
-
                 int noScene = SceneManager.GetActiveScene().buildIndex;
-                if (noScene >= SceneManager.sceneCountInBuildSettings - 1)
+                if (noScene >= SceneManager.sceneCountInBuildSettings - 2)
                 {
-                    GameManager.Instance.AfficherFinDePartie();
-                    collision.gameObject.SetActive(false);
+                    GameManager.Instance.SetTempsFin(Time.time - GameManager.Instance.TempsDepart);
                 }
-                else
-                {
-                    GameManager.Instance.SetNiveau1(Time.time);
-                    SceneManager.LoadScene(noScene + 1);
-                }
+                SceneManager.LoadScene(noScene + 1);
 
             }
         }
